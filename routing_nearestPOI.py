@@ -46,6 +46,7 @@ class TaskRepository:
 
     # transform the pointlist into a point-shapefile
     def createShape(self, xy_json, epsg):
+        arcpy.AddMessage("createShape")
         # temp files
         temp_shapefile = os.path.join("in_memory", 'temp')
         inputjson = xy_json
@@ -97,6 +98,7 @@ class TaskRepository:
         return temp_shapefile
 
     def getConvexHullShapefile(self,shapefile,buffer):
+        arcpy.AddMessage("getConvexHullShapefile")
         convex_hull = os.path.join("in_memory", 'convex_hull' + str(random.randint(1, 100)))
         # Process: Minimum Bounding Geometry
         arcpy.MinimumBoundingGeometry_management(shapefile, convex_hull, "CONVEX_HULL", "ALL", "",
@@ -114,6 +116,7 @@ class TaskRepository:
 
     # Intersect Image and Polygon
     def Intersect(self, shape1, shape2):
+        arcpy.AddMessage("Intersect")
         temp_shape_intersect = os.path.join("in_memory", 'temp_shape_intersection' + str(random.randint(1, 100)))
         # Intersect Image and Polygon
         arcpy.AddMessage('process Intersect Shapefile')
@@ -124,6 +127,7 @@ class TaskRepository:
 
     #doku:https://openrouteservice.org/documentation/#/reference/directions/directions
     def getDistanceRouteOpenRouteService(self, StartPoint, EndPoint,profile):
+        arcpy.AddMessage("getDistanceRouteOpenRouteService")
         url = 'http://192.9.200.2:8080/ors/routes?'
         coordinates = '{},{}|{},{}'.format(StartPoint[0],StartPoint[1],EndPoint[0],EndPoint[1])
         vars = {
@@ -151,6 +155,7 @@ class TaskRepository:
 
 
     def transformPoint(self,x, y, epsg_In, epsg_OUT):
+        arcpy.AddMessage("transformPoint")
         point = arcpy.PointGeometry(arcpy.Point(x, y), arcpy.SpatialReference(epsg_In)).projectAs(
             arcpy.SpatialReference(epsg_OUT))
         return point.centroid
